@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import './questao.dart';
-import 'resposta.dart';
+import './resposta.dart';
 
-main() => runApp(PerguntaApp());
+void main() => runApp(const PerguntaApp());
 
 class _PerguntaAppState extends State<PerguntaApp> {
   var _perguntaSelecionada = 0;
@@ -12,17 +11,27 @@ class _PerguntaAppState extends State<PerguntaApp> {
     setState(() {
       _perguntaSelecionada++;
     });
-    print(_perguntaSelecionada);
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<String> perguntas = [
-      'Qual é a sua cor favorita?',
-      'Qual é o seu animal favorito?',
-      'Qual é a sua idade?',
-      'Qual o ano que você nasceu?',
+    final perguntas = [
+      {
+        'texto': 'Qual é a sua cor favorita?',
+        'respostas': ['Preto', 'Vermelho', 'Verde', 'Branco'],
+      },
+      {
+        'texto': 'Qual é o seu animal favorito?',
+        'respostas': ['Coelho', 'Cobra', 'Elefante', 'Leão'],
+      },
+      {
+        'texto': 'Qual é o seu instrutor favorito?',
+        'respostas': ['Maria', 'João', 'Leo', 'Pedro'],
+      },
     ];
+
+    List<String> respostas =
+        perguntas[_perguntaSelecionada]['respostas'] as List<String>;
 
     return MaterialApp(
       home: Scaffold(
@@ -30,11 +39,9 @@ class _PerguntaAppState extends State<PerguntaApp> {
           title: const Text('Perguntas'),
         ),
         body: Column(
-          children: <Widget>[
-            Questao(perguntas[_perguntaSelecionada]),
-            Resposta('Resposta 1', _responder),
-            Resposta('Resposta 2', _responder),
-            Resposta('Resposta 3', _responder),
+          children: [
+            Questao(perguntas[_perguntaSelecionada]['texto'] as String),
+            ...respostas.map((t) => Resposta(t, _responder)).toList(),
           ],
         ),
       ),
@@ -43,6 +50,9 @@ class _PerguntaAppState extends State<PerguntaApp> {
 }
 
 class PerguntaApp extends StatefulWidget {
+  const PerguntaApp({super.key});
+
+  @override
   _PerguntaAppState createState() {
     return _PerguntaAppState();
   }
